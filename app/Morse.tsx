@@ -67,7 +67,7 @@ const Morse = () => {
         const now = Date.now()
 
         const timeElapsed = now - lastPressDown.current
-        const morseCharacter = timeElapsed < constants.dotDuration ? '.' : '-'
+        const morseCharacter = timeElapsed < constants.dotDuration ? '·' : '-'
 
         lastPressDown.current = 0
         lastPressUp.current = now
@@ -109,15 +109,15 @@ const Morse = () => {
 
     return (
         <div className="flex flex-col flex-1 items-start w-full gap-4">
-            <div className="flex items-center gap-2 text-lg">
+            <div className="flex items-baseline gap-2 text-lg">
                 <span className="font-bold">Morse code:</span>
                 <span>{morse}</span>
             </div>
-            <div className="flex items-center gap-2 text-lg">
+            <div className="flex items-baseline gap-2 text-lg">
                 <span className="font-bold">Decoded text:</span>
                 <span>{text}</span>
             </div>
-            <div className="flex items-center gap-2 text-lg">
+            <div className="flex items-baseline gap-2 text-lg">
                 <span className="font-bold">Decoded word:</span>
                 <span>{word.current}</span>
                 {isPending && (
