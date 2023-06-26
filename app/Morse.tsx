@@ -8,6 +8,8 @@ const Morse = () => {
     const [morse, setMorse] = useState<String>('')
     const [text, setText] = useState<String>('')
     const [isPending, setIsPending] = useState<Boolean>(false)
+    const [isPressed, setIsPressed] = useState<Boolean>(false)
+    const [character, setCharacter] = useState<String>('')
 
     const lastPressDown = useRef(0)
     const lastPressUp = useRef(0)
@@ -40,6 +42,7 @@ const Morse = () => {
             word.current = word.current + decodeFromMorseToText(newMorseText)
 
             currentMorse.current = ''
+            setCharacter('')
             setMorse((prevMorse) => prevMorse + newMorseText)
             setText((prevText) => prevText + decodedText)
             setIsPending(false)
@@ -56,12 +59,14 @@ const Morse = () => {
     }, [])
 
     const handleDown = () => {
+        setIsPressed(true)
         lastPressDown.current = Date.now()
         lastPressUp.current = 0
         lastPressUpInactivity.current = 0
     }
 
     const handleUp = useCallback(() => {
+        setIsPressed(false)
         setIsPending(true)
 
         const now = Date.now()
@@ -74,6 +79,8 @@ const Morse = () => {
         lastPressUpInactivity.current = now
 
         currentMorse.current = currentMorse.current + morseCharacter
+
+        setCharacter(morseCharacter)
 
         setTimeout(() => checkLetter(now), constants.letterDuration)
         setTimeout(() => checkInactivity(now), constants.inactivityDuration)
@@ -123,6 +130,17 @@ const Morse = () => {
                 {isPending && (
                     <Loader />
                 )}
+            </div>
+            <div className="flex items-baseline gap-2 text-lg">
+                <span className="font-bold">Current hypothetical Morse signal:</span>
+                {isPressed
+                    ? (
+                        <Loader />
+                        )
+                    : (
+                        <span>{character}</span>
+                        )
+                }
             </div>
             <div className="flex items-center gap-4">
                 <button
